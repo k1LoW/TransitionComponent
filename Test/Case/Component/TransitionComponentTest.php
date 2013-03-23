@@ -521,4 +521,24 @@ class TransitionComponentTest extends CakeTestCase {
 		$this->assertNotEqual(array('mobile_index'), array_keys($check['transition_component_test']));
 	}
 
+	/**
+	 * testInvalidRedirect
+	 *
+	 */
+	public function testInvalidRedirect(){
+
+		$this->__loadController(array('action' => 'current_action'));
+		$c = $this->Controller;
+		$t = $c->Transition;
+		$s = $t->Session;
+
+		$c->request->data = array('NormalValidation' => array('max25char' => 'this will be handled as invalid'));
+		$result = $t->checkData(null, 'NormalValidation', null, 'validation was fail');
+		$this->assertFalse($result);
+
+		// jpn: current_actionでバリデーションエラーになっているのでcheckPrev('current_action')もfalseになるべきでは？
+		$result = $t->checkPrev('current_action');
+		$this->assertFalse($result);
+	}
+
 }
